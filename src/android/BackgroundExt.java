@@ -21,14 +21,12 @@
 
 package de.appplant.cordova.plugin.background;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.AppTask;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.view.View;
@@ -45,8 +43,6 @@ import java.util.List;
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.POWER_SERVICE;
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.M;
-import static android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS;
 import static android.view.WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON;
 import static android.view.WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD;
 import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
@@ -101,10 +97,7 @@ class BackgroundExt {
     {
         switch (action)
         {
-            case "batteryoptimizations":
-                disableBatteryOptimizations();
-                break;
-            case "webviewoptimizations":
+            case "optimizations":
                 disableWebViewOptimizations();
                 break;
             case "background":
@@ -184,26 +177,6 @@ class BackgroundExt {
         };
 
         thread.start();
-    }
-
-    @SuppressLint("BatteryLife")
-    private void disableBatteryOptimizations()
-    {
-        Activity activity = cordova.getActivity();
-        Intent intent     = new Intent();
-        String pkgName    = activity.getPackageName();
-        PowerManager pm   = (PowerManager)getService(POWER_SERVICE);
-
-        if (SDK_INT < M)
-            return;
-
-        if (pm.isIgnoringBatteryOptimizations(pkgName))
-            return;
-
-        intent.setAction(ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-        intent.setData(Uri.parse("package:" + pkgName));
-
-        cordova.getActivity().startActivity(intent);
     }
 
     /**

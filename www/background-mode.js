@@ -160,20 +160,7 @@ exports.disableWebViewOptimizations = function()
 {
     if (this._isAndroid)
     {
-        cordova.exec(null, null, 'BackgroundMode', 'webviewoptimizations', []);
-    }
-};
-
-/**
- * Disables battery optimazation mode for the app.
- *
- * @return [ Void ]
- */
-exports.disableBatteryOptimizations = function()
-{
-    if (this._isAndroid)
-    {
-        cordova.exec(null, null, 'BackgroundMode', 'batteryoptimizations', []);
+        cordova.exec(null, null, 'BackgroundMode', 'optimizations', []);
     }
 };
 

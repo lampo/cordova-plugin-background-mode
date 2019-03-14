@@ -104,8 +104,7 @@ public class BackgroundMode extends CordovaPlugin {
             case "disable":
                 disableMode();
                 break;
-            case "webviewoptimizations":
-            case "batteryoptimizations":
+            case "optimizations":
             case "background":
             case "foreground":
             case "tasklist":
@@ -304,4 +303,5 @@ public class BackgroundMode extends CordovaPlugin {
 
         cordova.getActivity().runOnUiThread(() -> webView.loadUrl("javascript:" + js));
     }
+
 }
