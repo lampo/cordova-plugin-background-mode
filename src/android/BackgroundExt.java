@@ -147,7 +147,6 @@ class BackgroundExt {
                 Intent.FLAG_ACTIVITY_SINGLE_TOP |
                 Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        clearSreenAndKeyguardFlags();
         app.startActivity(intent);
     }
 
@@ -245,8 +244,10 @@ class BackgroundExt {
      */
     private void unlock()
     {
-        addSreenAndKeyguardFlags();
-        getApp().startActivity(getLaunchIntent());
+        getApp().runOnUiThread(() -> {
+            addSreenAndKeyguardFlags();
+            getApp().startActivity(getLaunchIntent());
+        });
     }
 
     /**
@@ -286,15 +287,7 @@ class BackgroundExt {
      */
     private void addSreenAndKeyguardFlags()
     {
-        getApp().runOnUiThread(() -> getApp().getWindow().addFlags(FLAG_ALLOW_LOCK_WHILE_SCREEN_ON | FLAG_SHOW_WHEN_LOCKED | FLAG_TURN_SCREEN_ON | FLAG_DISMISS_KEYGUARD));
-    }
-
-    /**
-     * Clears required flags to the window to unlock/wakeup the device.
-     */
-    private void clearSreenAndKeyguardFlags()
-    {
-        getApp().runOnUiThread(() -> getApp().getWindow().clearFlags(FLAG_ALLOW_LOCK_WHILE_SCREEN_ON | FLAG_SHOW_WHEN_LOCKED | FLAG_TURN_SCREEN_ON | FLAG_DISMISS_KEYGUARD));
+        getApp().getWindow().addFlags(FLAG_ALLOW_LOCK_WHILE_SCREEN_ON | FLAG_SHOW_WHEN_LOCKED | FLAG_TURN_SCREEN_ON | FLAG_DISMISS_KEYGUARD);
     }
 
     /**
