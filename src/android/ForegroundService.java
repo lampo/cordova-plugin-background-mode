@@ -1,5 +1,6 @@
 /*
     Copyright 2013-2017 appPlant GmbH
+
     Licensed to the Apache Software Foundation (ASF) under one
     or more contributor license agreements.  See the NOTICE file
     distributed with this work for additional information
@@ -7,7 +8,9 @@
     to you under the Apache License, Version 2.0 (the
     "License"); you may not use this file except in compliance
     with the License.  You may obtain a copy of the License at
+
      http://www.apache.org/licenses/LICENSE-2.0
+
     Unless required by applicable law or agreed to in writing,
     software distributed under the License is distributed on an
     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -30,7 +33,6 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.app.NotificationChannel;
 
 import org.json.JSONObject;
 
@@ -63,7 +65,6 @@ public class ForegroundService extends Service {
     // Partial wake lock to prevent the app from going to sleep when locked
     private PowerManager.WakeLock wakeLock;
 
-    private final String CHANNEL_ID = "cordova-plugin-background-mode-id";
     /**
      * Allow clients to call on to the service.
      */
@@ -152,22 +153,6 @@ public class ForegroundService extends Service {
      * @param settings The config settings
      */
     private Notification makeNotification(JSONObject settings) {
-        // use channelid for Oreo and higher
-	if(Build.VERSION.SDK_INT >= 26){
-	    // The user-visible name of the channel.
-	    CharSequence name = "cordova-plugin-background-mode";
-	    // The user-visible description of the channel.
-	    String description = "cordova-plugin-background-moden notification";
-
-	    int importance = NotificationManager.IMPORTANCE_LOW;
-
-	    NotificationChannel mChannel = new NotificationChannel(this.CHANNEL_ID, name,importance);
-
-	    // Configure the notification channel.
-	    mChannel.setDescription(description);
-
-	    getNotificationManager().createNotificationChannel(mChannel);
-        }
         String title    = settings.optString("title", NOTIFICATION_TITLE);
         String text     = settings.optString("text", NOTIFICATION_TEXT);
         boolean bigText = settings.optBoolean("bigText", false);
@@ -182,10 +167,6 @@ public class ForegroundService extends Service {
                 .setContentText(text)
                 .setOngoing(true)
                 .setSmallIcon(getIconResId(settings));
-
-        if(Build.VERSION.SDK_INT >= 26){
-			       notification.setChannelId(this.CHANNEL_ID);
-        }
 
         if (settings.optBoolean("hidden", true)) {
             notification.setPriority(Notification.PRIORITY_MIN);
@@ -226,7 +207,6 @@ public class ForegroundService extends Service {
 
         Notification notification = makeNotification(settings);
         getNotificationManager().notify(NOTIFICATION_ID, notification);
-
     }
 
     /**
