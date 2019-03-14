@@ -74,12 +74,10 @@ class BackgroundExt {
      *
      * @param plugin   The cordova plugin.
      * @param action   The action to execute.
-     * @param callback The callback context used when
-     *                 calling back into JavaScript.
+     * @param callback The callback context used when calling back into JavaScript.
      */
     @SuppressWarnings("UnusedParameters")
-    static void execute (CordovaPlugin plugin, final String action,
-                         final CallbackContext callback) {
+    static void execute(CordovaPlugin plugin, final String action, final CallbackContext callback) {
 
         final BackgroundExt ext = new BackgroundExt(plugin);
 
@@ -97,10 +95,9 @@ class BackgroundExt {
      * Executes the request.
      *
      * @param action   The action to execute.
-     * @param callback The callback context used when
-     *                 calling back into JavaScript.
+     * @param callback The callback context used when calling back into JavaScript.
      */
-    private void execute (String action, CallbackContext callback) {
+    private void execute(String action, CallbackContext callback) {
 
         if (action.equalsIgnoreCase("optimizations")) {
             disableWebViewOptimizations();
@@ -148,12 +145,10 @@ class BackgroundExt {
      * Move app to foreground.
      */
     private void moveToForeground() {
-        Activity  app = getApp();
+        Activity app = getApp();
         Intent intent = getLaunchIntent();
 
-        intent.addFlags(
-                Intent.FLAG_ACTIVITY_REORDER_TO_FRONT |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         app.startActivity(intent);
     }
@@ -162,7 +157,7 @@ class BackgroundExt {
      * Enable GPS position tracking while in background.
      */
     private void disableWebViewOptimizations() {
-        Thread thread = new Thread(){
+        Thread thread = new Thread() {
             public void run() {
                 try {
                     Thread.sleep(1000);
@@ -172,10 +167,8 @@ class BackgroundExt {
                             View view = webView.get().getEngine().getView();
 
                             try {
-                                Class.forName("org.crosswalk.engine.XWalkCordovaView")
-                                        .getMethod("onShow")
-                                        .invoke(view);
-                            } catch (Exception e){
+                                Class.forName("org.crosswalk.engine.XWalkCordovaView").getMethod("onShow").invoke(view);
+                            } catch (Exception e) {
                                 view.dispatchWindowVisibilityChanged(View.VISIBLE);
                             }
                         }
@@ -247,7 +240,7 @@ class BackgroundExt {
      * Unlocks the device even with password protection.
      */
     private void unlock() {
-        Intent intent  = getLaunchIntent();
+        Intent intent = getLaunchIntent();
         getApp().startActivity(intent);
     }
 
@@ -263,8 +256,7 @@ class BackgroundExt {
             return;
         }
 
-        int level = PowerManager.SCREEN_DIM_WAKE_LOCK |
-                    PowerManager.ACQUIRE_CAUSES_WAKEUP;
+        int level = PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP;
 
         wakeLock = pm.newWakeLock(level, "BackgroundModeExt");
         wakeLock.setReferenceCounted(false);
@@ -289,12 +281,8 @@ class BackgroundExt {
 
         app.runOnUiThread(new Runnable() {
             public void run() {
-                window.addFlags(
-                        FLAG_ALLOW_LOCK_WHILE_SCREEN_ON |
-                        FLAG_SHOW_WHEN_LOCKED |
-                        FLAG_TURN_SCREEN_ON |
-                        FLAG_DISMISS_KEYGUARD
-                );
+                window.addFlags(FLAG_ALLOW_LOCK_WHILE_SCREEN_ON | FLAG_SHOW_WHEN_LOCKED | FLAG_TURN_SCREEN_ON
+                        | FLAG_DISMISS_KEYGUARD);
             }
         });
     }
@@ -312,7 +300,7 @@ class BackgroundExt {
      * The launch intent for the main activity.
      */
     private Intent getLaunchIntent() {
-        Context app    = getApp().getApplicationContext();
+        Context app = getApp().getApplicationContext();
         String pkgName = app.getPackageName();
 
         return app.getPackageManager().getLaunchIntentForPackage(pkgName);
