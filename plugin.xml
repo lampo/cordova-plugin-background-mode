@@ -37,9 +37,6 @@
             <feature name="BackgroundMode">
                 <param name="android-package" value="de.appplant.cordova.plugin.background.BackgroundMode"/>
             </feature>
-            <feature name="BackgroundModeExt">
-                <param name="android-package" value="de.appplant.cordova.plugin.background.BackgroundModeExt"/>
-            </feature>
         </config-file>
 
         <config-file target="res/xml/config.xml" parent="/*">
